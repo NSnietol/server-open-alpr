@@ -5,7 +5,7 @@ services:
   restart: unless-stopped
   working_dir: /tmp/
   ports: 
-   - "4300:8000"
+   - "8080:8000"
 
   command: bash -c "pip3 install -r requirements.txt && uvicorn main:app --host 0.0.0.0 --port 8000"
   #tail -f /dev/null 
