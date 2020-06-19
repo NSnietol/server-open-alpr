@@ -33,9 +33,9 @@ settings()
 @app.post("/open-alpr-reconocimiento/", response_model=ResponseAlpr)
 async def identify_controller(file: UploadFile = File(...)):
 
-    logger.info(file)
+
     if(file is not None):
-        return get_plates(file)
+        return get_plates(await file.read())
     else:
         return ResponseAlpr(messsage='No se envió informacion', code=Error.NO_PLATE_FOUND.value, plates=[])
 
@@ -44,12 +44,8 @@ async def identify_controller(file: UploadFile = File(...)):
 async def main():
     content = """
                 <body>
-                <form action="/files/" enctype="multipart/form-data" method="post">
-                <input name="files" type="file" multiple>
-                <input type="submit">
-                </form>
                 <form action="/open-alpr-reconocimiento/" enctype="multipart/form-data" method="post">
-                <input name="file" type="file" multiple>
+                <input name="file" type="file">
                 <input type="submit">
                 </form>
                 </body>

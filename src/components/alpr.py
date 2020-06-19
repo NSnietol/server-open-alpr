@@ -4,8 +4,9 @@ from loguru import logger
 from src.components.models import ResponseAlpr
 from src.components.error import Error
 
-def get_plates(imagen):
 
+def get_plates(imagen):
+ 
     alpr = None
     country = 'us'
     config = '/etc/openalpr/openalpr.conf'
@@ -17,38 +18,28 @@ def get_plates(imagen):
         if not alpr.is_loaded():
             logger.warning('"Error loading OpenALPR')
             return ResponseAlpr(message='Error loading OpenALPR', code=Error.ERROR_FALTAL.value)
-       
+
         else:
             logger.info("Using OpenALPR " + alpr.get_version())
             alpr.set_top_n(7)
             alpr.set_default_region("wa")
             alpr.set_detect_region(False)
-            jpeg_bytes = open(imagen, "rb").read()
-            results = alpr.recognize_array(jpeg_bytes)
-
-            # Uncomment to see the full results structure
-            # import plogger.info
-            # plogger.info.plogger.info(results)
+            logger.info("Let's open the file")
+            results = alpr.recognize_array(imagen)
 
             logger.info("Image size: %dx%d" %
-                  (results['img_width'], results['img_height']))
+                        (results['img_width'], results['img_height']))
             logger.info("Processing Time: %f" % results['processing_time_ms'])
+            logger.info(results['results'])
 
-            i = 0
-            for plate in results['results']:
-                i += 1
-                logger.info("Plate #%d" % i)
-                logger.info("   %12s %12s" % ("Plate", "Confidence"))
-                for candidate in plate['candidates']:
-                    prefix = "-"
-                    if candidate['matches_template']:
-                        prefix = "*"
+            if(len(results['results']) > 0):
+                return ResponseAlpr(code=Error.OK.value, message='Everything ok', result=results['results'])
+            else:
+                return ResponseAlpr(code=Error.NO_PLATE_FOUND.value, message='Any plates were found')
 
-                    logger.info("  %s %12s%12f" %
-                          (prefix, candidate['plate'], candidate['confidence']))
-    except BaseException:
-            logger.warning('Exception loading OpenALPR')
-            return ResponseAlpr(message='Error loading OpenALPR', code=Error.ERROR_FALTAL.value)
+    except BaseException as excep:
+        logger.warning('Exception loading OpenALPR')
+        return ResponseAlpr(message='Error loading OpenALPR'+str(excep), code=Error.ERROR_FALTAL.value)
 
     finally:
         if alpr:
