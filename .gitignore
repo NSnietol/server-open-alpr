@@ -1,10 +1,11 @@
 
 # Created by https://www.toptal.com/developers/gitignore/api/images,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=images,python
-!image
+!image/OML670.jpg
+!image/*
 ### Images ###
 # JPEG
-*.jpg
+
 *.jpeg
 *.jpe
 *.jif

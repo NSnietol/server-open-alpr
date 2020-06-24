@@ -37,7 +37,7 @@ async def identify_controller(file: UploadFile = File(...)):
     if(file is not None):
         return get_plates(await file.read())
     else:
-        return ResponseAlpr(messsage='No se envió informacion', code=Error.NO_PLATE_FOUND.value, plates=[])
+        return ResponseAlpr(messsage='Any information was received', code=Error.NO_PLATE_FOUND.value, plates=[])
 
 
 @app.get("/")

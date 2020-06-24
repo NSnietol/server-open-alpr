@@ -12,7 +12,7 @@ Go to localhost:8080/docs and you'll get the swagger info.
 
 # Testing :white_check_mark:
 
-![alt](image/OML670.jpg)
+![Testing picture](./image/OML670.jpg)
 
 
 Checking the response you'll get the next one :heavy_check_mark:
