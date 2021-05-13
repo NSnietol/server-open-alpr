@@ -11,7 +11,7 @@ loguru == 0.3.2
 
 
 # C:\Personal\server\src\components\models.py: 1
-pydantic == 1.5.1
+pydantic == 1.6.2
 
 uvicorn == 0.11.5
 
